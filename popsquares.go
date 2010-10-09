@@ -33,18 +33,18 @@ type square struct {
 var sw, sh, gw, gh, nsquares int
 var squares []*square
 var subdivision int
-var twitch = false
-
 var colors []image.RGBAColor
 var ncolors = 256
 
 var once sync.Once
 
 func popinit(screen draw.Image) {
-	if rand.Intn(2) > 0 {
-		twitch = true
+	if rand.Intn(10) > 0 {
+		// make the "cool blue" color the default in most cases
+		colors = xscr.Interpolate(image.RGBAColor{0, 0, 0, 0xff}, image.RGBAColor{0, 0, 0xff, 0xff}, ncolors)
+	} else {
+		colors = xscr.SmoothRandomCmap(ncolors)
 	}
-	colors = xscr.SmoothRandomCmap(ncolors)
 
 	subdivision = rand.Intn(15) + 10
 	sw = screen.Bounds().Dx() / subdivision
@@ -72,9 +72,6 @@ func popsquares(screen draw.Image) {
 			draw.Draw(screen, s.r, image.ColorImage{colors[s.col]}, image.ZP)
 			s.col = s.col + 1
 			if s.col >= ncolors {
-				if twitch { //&& rand.Intn(3) == 0 {
-					colors = xscr.SmoothRandomCmap(ncolors)
-				}
 				s.col = rand.Intn(ncolors)
 			}
 		}
