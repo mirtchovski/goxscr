@@ -24,7 +24,7 @@ import (
 	"rand"
 	"image"
 
-	"goxscr.googlecode.com/hg/xscr"
+	"./xscr"
 )
 
 var ncolors int = 256

@@ -26,7 +26,7 @@ import (
 	"rand"
 	"exp/draw"
 	"time"
-	"goxscr.googlecode.com/hg/xscr"
+	"./xscr"
 )
 
 var iterations = 40000

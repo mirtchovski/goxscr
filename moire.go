@@ -23,7 +23,7 @@ import (
 	"exp/draw"
 	"rand"
 
-	"goxscr.googlecode.com/hg/xscr"
+	"./xscr"
 )
 
 var offset = 50

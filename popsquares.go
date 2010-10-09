@@ -22,7 +22,7 @@ import (
 	"image"
 	"sync"
 
-	"goxscr.googlecode.com/hg/xscr"
+	"./xscr"
 )
 
 type square struct {
