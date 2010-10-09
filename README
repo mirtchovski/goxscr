@@ -1,0 +1,14 @@
+A rewrite in Go of the Plan 9 port of some of the xscreensaver hacks
+(mostly the ones not using OpenGL).
+
+For xscreensaver hacks go here: http://www.jwz.org/xscreensaver/
+
+For the Plan 9 ports of the above go here: http://mirtchovski.com/p9/xscr/
+
+Each hack is compiled into a separate binary. Sample:
+
+$ make
+...
+$ ./moire
+
+Comments, fixes, etc: mirtchovski@gmail.com
