@@ -70,7 +70,7 @@ func hurm(screen draw.Image) {
 			points[j].Y = ylim - y
 			j++
 		}
-		if xsym > 0 && ysym >0 {
+		if xsym > 0 && ysym > 0 {
 			points[j].X = xlim - x
 			points[j].Y = ylim - y
 			j++

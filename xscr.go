@@ -41,16 +41,20 @@ func Interpolate(c1, c2 image.RGBAColor, ncol int) (cmap []image.RGBAColor) {
 	return
 }
 
-// A randomized smooth color palette
+// A randomized smooth color palette from a dark color to a brighter one
 func SmoothRandomCmap(ncol int) []image.RGBAColor {
 	var c [2]image.RGBAColor
 
-	for i := 0; i < 2; i++ {
-		c[i].R = uint8(rand.Intn(0xff))
-		c[i].G = uint8(rand.Intn(0xff))
-		c[i].B = uint8(rand.Intn(0xff))
-		c[i].A = 0xff
-	}
+	c[0].R = uint8(rand.Intn(128))
+	c[0].G = uint8(rand.Intn(128))
+	c[0].B = uint8(rand.Intn(128))
+	c[0].A = 0xff
+
+	c[1].R = uint8(rand.Intn(128) + 128)
+	c[1].G = uint8(rand.Intn(128) + 128)
+	c[1].B = uint8(rand.Intn(128) + 128)
+	c[1].A = 0xff
+
 	return Interpolate(c[0], c[1], ncol)
 }
 
@@ -84,7 +88,7 @@ loop:
 		switch f := e.(type) {
 		case draw.MouseEvent:
 		case draw.KeyEvent:
-			if f.Key == 65307 {	// ESC
+			if f.Key == 65307 { // ESC
 				break loop
 			}
 		case draw.ConfigEvent:

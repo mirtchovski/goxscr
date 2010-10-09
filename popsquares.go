@@ -41,10 +41,10 @@ var ncolors = 256
 var once sync.Once
 
 func popinit(screen draw.Image) {
-	if rand.Intn(2) > 1 {
+	if rand.Intn(2) > 0 {
 		twitch = true
 	}
-	colors = xscr.Interpolate(image.RGBAColor{0, 0, 0, 0xff}, image.RGBAColor{0, 0, 0xff, 0xff}, ncolors)
+	colors = xscr.SmoothRandomCmap(ncolors)
 
 	subdivision = rand.Intn(15) + 10
 	sw = screen.Bounds().Dx() / subdivision
