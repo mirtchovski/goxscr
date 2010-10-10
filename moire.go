@@ -35,8 +35,8 @@ func moire(screen draw.Image) {
 
 	colors := xscr.SmoothRandomCmap(ncolors)
 	ncolors = len(colors)
-	xo := rand.Intn(r.Dx() - r.Dx()/2)
-	yo := rand.Intn(r.Dy() - r.Dy()/2)
+	xo := rand.Intn(r.Dx()/2) + r.Dx()/2
+	yo := rand.Intn(r.Dy()/2) + r.Dy()/2
 
 	for y := 0; y < r.Dy(); y++ {
 		for x := 0; x < r.Dx(); x++ {
