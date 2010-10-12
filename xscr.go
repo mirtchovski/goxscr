@@ -50,9 +50,9 @@ func SmoothRandomCmap(ncol int) []image.RGBAColor {
 	c[0].B = uint8(rand.Intn(128))
 	c[0].A = 0xff
 
-	c[1].R = uint8(rand.Intn(128) + 128)
-	c[1].G = uint8(rand.Intn(128) + 128)
-	c[1].B = uint8(rand.Intn(128) + 128)
+	c[1].R = uint8(rand.Intn(128)) + c[0].R 
+	c[1].G = uint8(rand.Intn(128)) + c[0].G
+	c[1].B = uint8(rand.Intn(128)) + c[0].B
 	c[1].A = 0xff
 
 	return Interpolate(c[0], c[1], ncol)

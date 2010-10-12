@@ -2,8 +2,10 @@ include $(GOROOT)/src/Make.inc
 
 TARG=deco\
 	moire\
+	palette\
 	popsquares\
 	rorschach\
+	wander\
 
 SHARED=xscr
 
