@@ -97,6 +97,6 @@ func wander(screen draw.Image) {
 }
 
 func main() {
-	xscr.Init(wander, 1e5)
+	xscr.Init(wander, 1e3)
 	xscr.Run()
 }

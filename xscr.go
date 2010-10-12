@@ -29,14 +29,20 @@ func Interpolate(c1, c2 image.RGBAColor, ncol int) (cmap []image.RGBAColor) {
 		r := int(c1.R) + 2*i*int(c2.R)/ncol
 		g := int(c1.G) + 2*i*int(c2.G)/ncol
 		b := int(c1.B) + 2*i*int(c2.B)/ncol
+		if r > 0xff { r = 0xff }
+		if g > 0xff { g = 0xff }
+		if b > 0xff { b = 0xff }
 
 		cmap[i] = image.RGBAColor{uint8(r), uint8(g), uint8(b), 0xff}
 	}
-	for i := ncol / 2; i < ncol; i++ {
+	for i := 0; i < ncol/2; i++ {
 		r := int(c2.R) + 2*i*int(c1.R)/ncol
 		g := int(c2.G) + 2*i*int(c1.G)/ncol
 		b := int(c2.B) + 2*i*int(c1.B)/ncol
-		cmap[i] = image.RGBAColor{uint8(r), uint8(g), uint8(b), 0xff}
+		if r > 0xff { r = 0xff }
+		if g > 0xff { g = 0xff }
+		if b > 0xff { b = 0xff }
+		cmap[ncol-i-1] = image.RGBAColor{uint8(r), uint8(g), uint8(b), 0xff}
 	}
 	return
 }

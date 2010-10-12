@@ -4,19 +4,19 @@ package main
 import (
 	"exp/draw"
 	"image"
+	"flag"
 
 	"./xscr"
 )
 
+var subdivision int
+
+var sw, sh, gw, gh int
+var ncolors = 256
+var col = 0
+var colors []image.RGBAColor
+
 func palette(screen draw.Image) {
-	const subdivision = 16
-
-	var sw, sh, gw, gh int
-	var ncolors = 256
-	var col = 0
-
-	colors := xscr.SmoothRandomCmap(ncolors)
-
 	sw = screen.Bounds().Dx() / subdivision
 	sh = screen.Bounds().Dy() / subdivision
 	gw = screen.Bounds().Dx() / sw
@@ -29,10 +29,21 @@ func palette(screen draw.Image) {
 			draw.Draw(screen, r, image.NewColorImage(colors[col]), image.ZP)
 		}
 	}
+	if *cycle {
+		col = (col+1)%ncolors
+	}
+	xscr.Flush()
 }
 
-func main() {
+var size = flag.Int("size", 16, "width of the palette")
+var cycle = flag.Bool("cycle", false, "cycle through colors")
 
-	xscr.Init(palette, 1e12)
+func main() {
+	flag.Parse()
+	subdivision = *size
+	ncolors = subdivision*subdivision
+	colors = xscr.SmoothRandomCmap(ncolors)
+
+	xscr.Init(palette, 10e6)
 	xscr.Run()
 }
