@@ -39,7 +39,7 @@ func hurm(screen draw.Image) {
 	ysym := rand.Intn(2)
 
 	color := xscr.RandomCmap(1)[0]
-	black := image.ColorImage{image.RGBAColor{0, 0, 0, 0xff}}
+	black := image.NewColorImage(image.RGBAColor{0, 0, 0, 0xff})
 
 	draw.Draw(screen, screen.Bounds(), black, image.ZP)
 	xscr.Flush()

@@ -69,7 +69,7 @@ func popsquares(screen draw.Image) {
 	for y := 0; y < gh; y++ {
 		for x := 0; x < gw; x++ {
 			s := squares[gw*y+x]
-			draw.Draw(screen, s.r, image.ColorImage{colors[s.col]}, image.ZP)
+			draw.Draw(screen, s.r, image.NewColorImage(colors[s.col]), image.ZP)
 			s.col = s.col + 1
 			if s.col >= ncolors {
 				s.col = rand.Intn(ncolors)
