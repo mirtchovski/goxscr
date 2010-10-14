@@ -144,6 +144,7 @@ func abs(x int) int {
 	return -x
 }
 
+// Brezenham's line drawing algorithm (no width)
 func Line(dst draw.Image, src image.Color, p0, p1 image.Point) {
 	steep := abs(p1.Y-p0.Y) > abs(p1.X-p0.X)
 	if steep {
