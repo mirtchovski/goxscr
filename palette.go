@@ -30,7 +30,7 @@ func palette(screen draw.Image) {
 		}
 	}
 	if *cycle {
-		col = (col+1)%ncolors
+		col = (col + 1) % ncolors
 	}
 	xscr.Flush()
 }
@@ -41,7 +41,7 @@ var cycle = flag.Bool("cycle", false, "cycle through colors")
 func main() {
 	flag.Parse()
 	subdivision = *size
-	ncolors = subdivision*subdivision
+	ncolors = subdivision * subdivision
 	colors = xscr.SmoothRandomCmap(ncolors)
 
 	xscr.Init(palette, 10e6)

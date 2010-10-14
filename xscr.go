@@ -29,9 +29,15 @@ func Interpolate(c1, c2 image.RGBAColor, ncol int) (cmap []image.RGBAColor) {
 		r := int(c1.R) + 2*i*int(c2.R)/ncol
 		g := int(c1.G) + 2*i*int(c2.G)/ncol
 		b := int(c1.B) + 2*i*int(c2.B)/ncol
-		if r > 0xff { r = 0xff }
-		if g > 0xff { g = 0xff }
-		if b > 0xff { b = 0xff }
+		if r > 0xff {
+			r = 0xff
+		}
+		if g > 0xff {
+			g = 0xff
+		}
+		if b > 0xff {
+			b = 0xff
+		}
 
 		cmap[i] = image.RGBAColor{uint8(r), uint8(g), uint8(b), 0xff}
 	}
@@ -39,9 +45,15 @@ func Interpolate(c1, c2 image.RGBAColor, ncol int) (cmap []image.RGBAColor) {
 		r := int(c2.R) + 2*i*int(c1.R)/ncol
 		g := int(c2.G) + 2*i*int(c1.G)/ncol
 		b := int(c2.B) + 2*i*int(c1.B)/ncol
-		if r > 0xff { r = 0xff }
-		if g > 0xff { g = 0xff }
-		if b > 0xff { b = 0xff }
+		if r > 0xff {
+			r = 0xff
+		}
+		if g > 0xff {
+			g = 0xff
+		}
+		if b > 0xff {
+			b = 0xff
+		}
 		cmap[ncol-i-1] = image.RGBAColor{uint8(r), uint8(g), uint8(b), 0xff}
 	}
 	return
@@ -56,7 +68,7 @@ func SmoothRandomCmap(ncol int) []image.RGBAColor {
 	c[0].B = uint8(rand.Intn(128))
 	c[0].A = 0xff
 
-	c[1].R = uint8(rand.Intn(128)) + c[0].R 
+	c[1].R = uint8(rand.Intn(128)) + c[0].R
 	c[1].G = uint8(rand.Intn(128)) + c[0].G
 	c[1].B = uint8(rand.Intn(128)) + c[0].B
 	c[1].A = 0xff
@@ -123,4 +135,47 @@ func Init(hack func(draw.Image), delay int64) bool {
 	hackdelay = delay
 
 	return true
+}
+
+func abs(x int) int {
+	if x > 0 {
+		return x
+	}
+	return -x
+}
+
+func Line(dst draw.Image, src image.Color, p0, p1 image.Point) {
+	steep := abs(p1.Y-p0.Y) > abs(p1.X-p0.X)
+	if steep {
+		p0.X, p0.Y = p0.Y, p0.X
+		p1.X, p1.Y = p1.Y, p1.X
+
+	}
+	if p0.X > p1.X {
+		p0, p1 = p1, p0
+	}
+	deltax := p1.X - p0.X
+	deltay := abs(p1.Y - p0.Y)
+	error := deltax / 2
+	y := p0.Y
+
+	var ystep int
+	if p0.Y < p1.Y {
+		ystep = 1
+	} else {
+		ystep = -1
+	}
+
+	for x := p0.X; x < p1.X; x++ {
+		if steep {
+			dst.Set(y, x, src)
+		} else {
+			dst.Set(x, y, src)
+		}
+		error = error - deltay
+		if error < 0 {
+			y = y + ystep
+			error = error + deltax
+		}
+	}
 }

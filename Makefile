@@ -5,6 +5,7 @@ TARG=deco\
 	palette\
 	popsquares\
 	rorschach\
+	spirograph\
 	wander\
 
 SHARED=xscr
