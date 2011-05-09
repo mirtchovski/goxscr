@@ -45,7 +45,7 @@ func deco1(screen draw.Image, x, y, w, h, depth int) {
 		r := image.Rect(x, y, x+w, y+h)
 		r = r.Add(screen.Bounds().Min)
 		draw.Draw(screen, r, image.NewColorImage(colors[col]), image.ZP)
-		draw.Border(screen, r, 1, black, image.ZP)
+		xscr.Border(screen, r, 1, black, image.ZP)
 	} else {
 		if rand.Intn(2) > 0 {
 			deco1(screen, x, y, w/2, h, depth+1)

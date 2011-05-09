@@ -98,7 +98,7 @@ func min(f, s int) int {
 
 func spirograph(screen draw.Image) {
 	var width, height, radius, radius1, radius2 int
-	var divisor float
+	var divisor float64
 	var distance int
 
 	width = screen.Bounds().Dx()
@@ -108,10 +108,10 @@ func spirograph(screen draw.Image) {
 
 	draw.Draw(screen, screen.Bounds(), black, image.ZP)
 
-	divisor = ((rand.Float()*3.0 + 1) * float((((rand.Intn(2) & 1) * 2) - 1)))
+	divisor = ((rand.Float64()*3.0 + 1) * float64((((rand.Intn(2) & 1) * 2) - 1)))
 
 	radius1 = radius
-	radius2 = int(float(radius)/divisor) + 5
+	radius2 = int(float64(radius)/divisor) + 5
 	distance = 100 + rand.Intn(200)
 
 	color = rand.Intn(ncolors)

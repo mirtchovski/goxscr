@@ -11,6 +11,26 @@ import (
 	"fmt"
 	"os"
 )
+
+func Border(dst draw.Image, r image.Rectangle, w int, src image.Image, sp image.Point) {
+       i := w
+       if i > 0 {
+               // inside r
+               draw.Draw(dst, image.Rect(r.Min.X, r.Min.Y, r.Max.X, r.Min.Y+i), src, sp)                                // top
+               draw.Draw(dst, image.Rect(r.Min.X, r.Min.Y+i, r.Min.X+i, r.Max.Y-i), src, sp.Add(image.Pt(0, i)))        // left
+               draw.Draw(dst, image.Rect(r.Max.X-i, r.Min.Y+i, r.Max.X, r.Max.Y-i), src, sp.Add(image.Pt(r.Dx()-i, i))) // right
+               draw.Draw(dst, image.Rect(r.Min.X, r.Max.Y-i, r.Max.X, r.Max.Y), src, sp.Add(image.Pt(0, r.Dy()-i)))     // bottom
+               return
+       }
+
+       // outside r;
+       i = -i
+       draw.Draw(dst, image.Rect(r.Min.X-i, r.Min.Y-i, r.Max.X+i, r.Min.Y), src, sp.Add(image.Pt(-i, -i))) // top
+       draw.Draw(dst, image.Rect(r.Min.X-i, r.Min.Y, r.Min.X, r.Max.Y), src, sp.Add(image.Pt(-i, 0)))      // left
+       draw.Draw(dst, image.Rect(r.Max.X, r.Min.Y, r.Max.X+i, r.Max.Y), src, sp.Add(image.Pt(r.Dx(), 0)))  // right
+       draw.Draw(dst, image.Rect(r.Min.X-i, r.Max.Y, r.Max.X+i, r.Max.Y+i), src, sp.Add(image.Pt(-i, 0)))  // bottom
+}
+
 // Creates a random colormap
 func RandomCmap(ncol int) (cmap []image.RGBAColor) {
 	cmap = make([]image.RGBAColor, ncol, ncol)
@@ -63,14 +83,14 @@ func Interpolate(c1, c2 image.RGBAColor, ncol int) (cmap []image.RGBAColor) {
 func SmoothRandomCmap(ncol int) []image.RGBAColor {
 	var c [2]image.RGBAColor
 
-	c[0].R = uint8(rand.Intn(128))
-	c[0].G = uint8(rand.Intn(128))
-	c[0].B = uint8(rand.Intn(128))
+	c[0].R = uint8(rand.Intn(0xff))
+	c[0].G = uint8(rand.Intn(0xff))
+	c[0].B = uint8(rand.Intn(0xff))
 	c[0].A = 0xff
 
-	c[1].R = uint8(rand.Intn(128)) + c[0].R
-	c[1].G = uint8(rand.Intn(128)) + c[0].G
-	c[1].B = uint8(rand.Intn(128)) + c[0].B
+	c[1].R = uint8(rand.Intn(0xff))
+	c[1].G = uint8(rand.Intn(0xff))
+	c[1].B = uint8(rand.Intn(0xff))
 	c[1].A = 0xff
 
 	return Interpolate(c[0], c[1], ncol)
