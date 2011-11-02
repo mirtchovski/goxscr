@@ -4,6 +4,7 @@ TARG=deco\
 	moire\
 	palette\
 	popsquares\
+	qc\
 	rorschach\
 	spirograph\
 	wander\

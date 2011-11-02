@@ -14,22 +14,22 @@ import (
 )
 
 func Border(dst draw.Image, r image.Rectangle, w int, src image.Image, sp image.Point) {
-       i := w
-       if i > 0 {
-               // inside r
-               draw.Draw(dst, image.Rect(r.Min.X, r.Min.Y, r.Max.X, r.Min.Y+i), src, sp, draw.Over)                                // top
-               draw.Draw(dst, image.Rect(r.Min.X, r.Min.Y+i, r.Min.X+i, r.Max.Y-i), src, sp.Add(image.Pt(0, i)), draw.Over)        // left
-               draw.Draw(dst, image.Rect(r.Max.X-i, r.Min.Y+i, r.Max.X, r.Max.Y-i), src, sp.Add(image.Pt(r.Dx()-i, i)), draw.Over) // right
-               draw.Draw(dst, image.Rect(r.Min.X, r.Max.Y-i, r.Max.X, r.Max.Y), src, sp.Add(image.Pt(0, r.Dy()-i)), draw.Over)     // bottom
-               return
-       }
+	i := w
+	if i > 0 {
+		// inside r
+		draw.Draw(dst, image.Rect(r.Min.X, r.Min.Y, r.Max.X, r.Min.Y+i), src, sp, draw.Over)                                // top
+		draw.Draw(dst, image.Rect(r.Min.X, r.Min.Y+i, r.Min.X+i, r.Max.Y-i), src, sp.Add(image.Pt(0, i)), draw.Over)        // left
+		draw.Draw(dst, image.Rect(r.Max.X-i, r.Min.Y+i, r.Max.X, r.Max.Y-i), src, sp.Add(image.Pt(r.Dx()-i, i)), draw.Over) // right
+		draw.Draw(dst, image.Rect(r.Min.X, r.Max.Y-i, r.Max.X, r.Max.Y), src, sp.Add(image.Pt(0, r.Dy()-i)), draw.Over)     // bottom
+		return
+	}
 
-       // outside r;
-       i = -i
-       draw.Draw(dst, image.Rect(r.Min.X-i, r.Min.Y-i, r.Max.X+i, r.Min.Y), src, sp.Add(image.Pt(-i, -i)), draw.Over) // top
-       draw.Draw(dst, image.Rect(r.Min.X-i, r.Min.Y, r.Min.X, r.Max.Y), src, sp.Add(image.Pt(-i, 0)), draw.Over)      // left
-       draw.Draw(dst, image.Rect(r.Max.X, r.Min.Y, r.Max.X+i, r.Max.Y), src, sp.Add(image.Pt(r.Dx(), 0)), draw.Over)  // right
-       draw.Draw(dst, image.Rect(r.Min.X-i, r.Max.Y, r.Max.X+i, r.Max.Y+i), src, sp.Add(image.Pt(-i, 0)), draw.Over)  // bottom
+	// outside r;
+	i = -i
+	draw.Draw(dst, image.Rect(r.Min.X-i, r.Min.Y-i, r.Max.X+i, r.Min.Y), src, sp.Add(image.Pt(-i, -i)), draw.Over) // top
+	draw.Draw(dst, image.Rect(r.Min.X-i, r.Min.Y, r.Min.X, r.Max.Y), src, sp.Add(image.Pt(-i, 0)), draw.Over)      // left
+	draw.Draw(dst, image.Rect(r.Max.X, r.Min.Y, r.Max.X+i, r.Max.Y), src, sp.Add(image.Pt(r.Dx(), 0)), draw.Over)  // right
+	draw.Draw(dst, image.Rect(r.Min.X-i, r.Max.Y, r.Max.X+i, r.Max.Y+i), src, sp.Add(image.Pt(-i, 0)), draw.Over)  // bottom
 }
 
 // Creates a random colormap
@@ -90,19 +90,19 @@ func SmoothRandomCmap(ncol int) []color.RGBA {
 	c[0].A = 0xff
 
 	if rand.Intn(2) > 0 {
-		c[1].R = c[0].R+uint8(rand.Intn(0xff-int(c[0].R)))	// make sure we don't overflow
+		c[1].R = c[0].R + uint8(rand.Intn(0xff-int(c[0].R))) // make sure we don't overflow
 	} else {
-		c[1].R = c[0].R-uint8(rand.Intn(int(c[0].R)))	// or underflow
+		c[1].R = c[0].R - uint8(rand.Intn(int(c[0].R))) // or underflow
 	}
 	if rand.Intn(2) > 0 {
-		c[1].G = c[0].G+uint8(rand.Intn(0xff-int(c[0].G)))	// make sure we don't overflow
+		c[1].G = c[0].G + uint8(rand.Intn(0xff-int(c[0].G))) // make sure we don't overflow
 	} else {
-		c[1].G = c[0].G-uint8(rand.Intn(int(c[0].G)))	// or underflow
+		c[1].G = c[0].G - uint8(rand.Intn(int(c[0].G))) // or underflow
 	}
 	if rand.Intn(2) > 0 {
-		c[1].B = c[0].B+uint8(rand.Intn(0xff-int(c[0].B)))	// make sure we don't overflow
+		c[1].B = c[0].B + uint8(rand.Intn(0xff-int(c[0].B))) // make sure we don't overflow
 	} else {
-		c[1].B = c[0].B-uint8(rand.Intn(int(c[0].B)))	// or underflow
+		c[1].B = c[0].B - uint8(rand.Intn(int(c[0].B))) // or underflow
 	}
 	c[1].A = 0xff
 
@@ -147,11 +147,11 @@ loop:
 
 // Initialize all state
 func Init(hack func(draw.Image), delay int64) bool {
-	var err os.Error
+	var err error
 
 	window, err = x11.NewWindow()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error:", err.String())
+		fmt.Fprintf(os.Stderr, "error:", err.Error())
 		return false
 	}
 
