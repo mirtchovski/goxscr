@@ -23,8 +23,9 @@ package main
 
 import (
 	"image"
+	"image/color"
+	"image/draw"
 	"rand"
-	"exp/draw"
 	"time"
 	"./xscr"
 )
@@ -38,10 +39,10 @@ func hurm(screen draw.Image) {
 	xsym := rand.Intn(2)
 	ysym := rand.Intn(2)
 
-	color := xscr.RandomCmap(1)[0]
-	black := image.NewColorImage(image.RGBAColor{0, 0, 0, 0xff})
+	clr := xscr.RandomCmap(1)[0]
+	black := image.NewUniform(color.RGBA{0, 0, 0, 0xff})
 
-	draw.Draw(screen, screen.Bounds(), black, image.ZP)
+	draw.Draw(screen, screen.Bounds(), black, image.ZP, draw.Over)
 	xscr.Flush()
 
 	xlim := screen.Bounds().Dx()
@@ -76,7 +77,7 @@ func hurm(screen draw.Image) {
 			j++
 		}
 		for i2 := 0; i2 < j; i2++ {
-			screen.Set(points[i2].X, points[i2].Y, color)
+			screen.Set(points[i2].X, points[i2].Y, clr)
 		}
 		xscr.Flush()
 		time.Sleep(10)

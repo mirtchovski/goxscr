@@ -22,12 +22,12 @@
  * ported to Plan 9 by andrey@lanl.gov, 06/02
  */
 
-
 // Rewritten in go by mirtchovski@gmail.com 10/10
 package main
 
 import (
-	"exp/draw"
+	"image/draw"
+	"image/color"
 	"rand"
 	"image"
 	"math"
@@ -36,12 +36,12 @@ import (
 	"./xscr"
 )
 
-var black *image.ColorImage
-var colors []image.RGBAColor
+var black *image.Uniform
+var colors []color.RGBA
 var ncolors int = 16
-var color int
+var clr int
 
-func do(screen draw.Image, radius1, radius2, d, color int) {
+func do(screen draw.Image, radius1, radius2, d, clr int) {
 	var width, height, xmid, ymid, x1, y1, x2, y2 int
 	var theta, delta int
 
@@ -75,7 +75,7 @@ loop:
 		npt1 := screen.Bounds().Min.Add(image.Pt(x1, y1))
 		npt2 := screen.Bounds().Min.Add(image.Pt(x2, y2))
 
-		xscr.Line(screen, colors[color], npt1, npt2)
+		xscr.Line(screen, colors[clr], npt1, npt2)
 
 		xscr.Flush()
 		time.Sleep(1e3)
@@ -106,7 +106,7 @@ func spirograph(screen draw.Image) {
 
 	radius = min(width, height) / 2
 
-	draw.Draw(screen, screen.Bounds(), black, image.ZP)
+	draw.Draw(screen, screen.Bounds(), black, image.ZP, draw.Over)
 
 	divisor = ((rand.Float64()*3.0 + 1) * float64((((rand.Intn(2) & 1) * 2) - 1)))
 
@@ -114,14 +114,14 @@ func spirograph(screen draw.Image) {
 	radius2 = int(float64(radius)/divisor) + 5
 	distance = 100 + rand.Intn(200)
 
-	color = rand.Intn(ncolors)
-	do(screen, radius1, -radius2, distance, color)
-	color = rand.Intn(ncolors)
-	do(screen, radius1, radius2, distance, color)
+	clr = rand.Intn(ncolors)
+	do(screen, radius1, -radius2, distance, clr)
+	clr = rand.Intn(ncolors)
+	do(screen, radius1, radius2, distance, clr)
 }
 
 func main() {
-	black = image.NewColorImage(image.RGBAColor{0, 0, 0, 0xff})
+	black = image.NewUniform(color.RGBA{0, 0, 0, 0xff})
 	colors = xscr.RandomCmap(ncolors)
 
 	xscr.Init(spirograph, 1e9)

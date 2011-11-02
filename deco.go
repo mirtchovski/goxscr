@@ -20,9 +20,10 @@
 package main
 
 import (
-	"exp/draw"
-	"rand"
+	"image/draw"
+	"image/color"
 	"image"
+	"rand"
 
 	"./xscr"
 )
@@ -33,8 +34,8 @@ var minHeight int = 0
 var minWidth int = 0
 var col int = 0
 
-var colors []image.RGBAColor
-var black = image.NewColorImage(image.RGBAColor{0, 0, 0, 0xff})
+var colors []color.RGBA
+var black = image.NewUniform(color.RGBA{0, 0, 0, 0xff})
 
 func deco1(screen draw.Image, x, y, w, h, depth int) {
 	if rand.Intn(maxDepth+1) < depth || w <= minWidth || h <= minHeight {
@@ -44,7 +45,7 @@ func deco1(screen draw.Image, x, y, w, h, depth int) {
 		}
 		r := image.Rect(x, y, x+w, y+h)
 		r = r.Add(screen.Bounds().Min)
-		draw.Draw(screen, r, image.NewColorImage(colors[col]), image.ZP)
+		draw.Draw(screen, r, image.NewUniform(colors[col]), image.ZP, draw.Over)
 		xscr.Border(screen, r, 1, black, image.ZP)
 	} else {
 		if rand.Intn(2) > 0 {
@@ -60,7 +61,7 @@ func deco1(screen draw.Image, x, y, w, h, depth int) {
 func deco(screen draw.Image) {
 	colors = xscr.RandomCmap(ncolors)
 
-	draw.Draw(screen, screen.Bounds(), image.NewColorImage(colors[col]), image.ZP)
+	draw.Draw(screen, screen.Bounds(), image.NewUniform(colors[col]), image.ZP, draw.Over)
 	deco1(screen, 0, 0, screen.Bounds().Dx(), screen.Bounds().Dy(), 0)
 }
 

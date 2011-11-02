@@ -17,7 +17,8 @@
 package main
 
 import (
-	"exp/draw"
+	"image/draw"
+	"image/color"
 	"rand"
 	"image"
 	"sync"
@@ -33,7 +34,7 @@ type square struct {
 var sw, sh, gw, gh, nsquares int
 var squares []*square
 var subdivision int
-var colors []image.RGBAColor
+var colors []color.RGBA
 var ncolors = 256
 
 var once sync.Once
@@ -64,7 +65,7 @@ func popsquares(screen draw.Image) {
 	for y := 0; y < gh; y++ {
 		for x := 0; x < gw; x++ {
 			s := squares[gw*y+x]
-			draw.Draw(screen, s.r, image.NewColorImage(colors[s.col]), image.ZP)
+			draw.Draw(screen, s.r, image.NewUniform(colors[s.col]), image.ZP, draw.Over)
 			s.col = s.col + 1
 			if s.col >= ncolors {
 				s.col = rand.Intn(ncolors)

@@ -12,7 +12,7 @@ SHARED=xscr
 
 all: $(SHARED:%=%.$O) $(TARG)
 
-$(TARG): %: %.$O
+$(TARG): %: %.$O $(SHARED:%=%.$O)
 	$(LD) -o $@ $<
 
 %.$O: %.go Makefile

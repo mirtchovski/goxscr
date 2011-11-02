@@ -17,7 +17,8 @@
 package main
 
 import (
-	"exp/draw"
+	"image/draw"
+	"image/color"
 	"rand"
 	"image"
 	"sync"
@@ -25,7 +26,7 @@ import (
 	"./xscr"
 )
 
-var colors []image.RGBAColor
+var colors []color.RGBA
 var ncolors int = 16
 var col int
 
@@ -40,7 +41,7 @@ var lastx, lasty int
 
 var once sync.Once
 
-var black *image.ColorImage
+var black *image.Uniform
 
 func wanderinit(screen draw.Image) {
 	colors = xscr.SmoothRandomCmap(ncolors)
@@ -58,10 +59,9 @@ func wanderinit(screen draw.Image) {
 	lastx = rand.Intn(width)
 	lasty = rand.Intn(height)
 
-	black = image.NewColorImage(image.RGBAColor{0, 0, 0, 0xff})
-	draw.Draw(screen, screen.Bounds(), black, image.ZP)
+	black = image.NewUniform(color.RGBA{0, 0, 0, 0xff})
+	draw.Draw(screen, screen.Bounds(), black, image.ZP, draw.Over)
 }
-
 
 func wander(screen draw.Image) {
 	once.Do(func() { wanderinit(screen) })

@@ -20,7 +20,7 @@
 package main
 
 import (
-	"exp/draw"
+	"image/draw"
 	"rand"
 
 	"./xscr"
@@ -49,6 +49,6 @@ func moire(screen draw.Image) {
 }
 
 func main() {
-	xscr.Init(moire, 10e8)
+	xscr.Init(moire, 1e9)
 	xscr.Run()
 }
