@@ -88,21 +88,24 @@ func worker(c chan image.Image, e chan int, r image.Rectangle) {
 	buf := make([]byte, *size*(*size))
 	sz, deg := *size, *degree
 
-	stridex := r.Dx() / sz // how big is each pixel from our crystal
-	if stridex == 0 {
-		stridex = 1
-	}
-	stridey := r.Dy() / sz
-	if stridey == 0 {
-		stridey = 1
-	}
+	h := r.Dx()
+	w := r.Dy()
+
+	stridex := 1 + r.Dx() / sz // how big is each pixel from our crystal
+	stridey := 1 + r.Dy() / sz
 
 	for {
 		ϕ := float64(<-e) * (*phi) * Degree
 		quasicrystal(sz, deg, ϕ, buf[:])
 
 		for y := 0; y < sz; y++ {
+			if y*stridey > w {
+				break
+			}
 			for x := 0; x < sz; x++ {
+				if x*stridex > h {
+					break
+				}
 				nr := image.Rect(x*stridex, y*stridey, x*stridex+stridex, y*stridey+stridey)
 				draw.Draw(img, nr, palette[buf[y*sz+x]], image.ZP, draw.Src)
 			}
@@ -118,7 +121,7 @@ func painter(c chan image.Image, w gui.Window) {
 	img := w.Screen()
 	r := img.Bounds()
 
-	// workers may complete in any order but they sync on 'c' if
+	// workers may complete in any order but eventually sync on 'c' if
 	// they're faster than the drawing here
 	for {
 		draw.Draw(img, r, <-c, image.ZP, draw.Src)
@@ -128,12 +131,14 @@ func painter(c chan image.Image, w gui.Window) {
 	}
 }
 
+var workers = flag.Int("w", 3, "workers")
 var frames = flag.Int64("f", 30, "max framerate")
-var phi = flag.Float64("s", 5, "step phase change")
+var randomize = flag.Bool("r", false, "randomize size, scale, degree and phi")
+
+var phi = flag.Float64("phi", 5, "step phase change")
 var size = flag.Int("size", 300, "crystal size")
 var scale = flag.Float64("scale", 30, "scale")
 var degree = flag.Int("degree", 5, "degree")
-var workers = flag.Int("w", 3, "workers")
 
 func init() {
 	palette = make([]image.Image, 256)
@@ -148,6 +153,13 @@ func main() {
 	runtime.GOMAXPROCS(*workers + 1)
 
 	rand.Seed(int64(os.Getpid()))
+
+	if *randomize {
+		*phi = rand.Float64()*10
+		*size = 100 + rand.Intn(200)
+		*scale = 25 + rand.Float64()*10
+		*degree = 3 + rand.Intn(5)
+	}
 
 	window, err := x11.NewWindow()
 	if err != nil {
