@@ -61,8 +61,6 @@ func quasicrystal(size, degree int, ϕ float64, buf []byte) {
 	for y := 0; y < size; y++ {
 		for x := 0; x < size; x++ {
 			θ := 0 * Degree
-			//θ := atan2(real x, real y) + ϕ;
-			//θ := atan2(real x + ϕ, real y + ϕ) + ϕ;
 			p := pt(x, y)
 			acc := wave(ϕ, θ, p)
 			for d := 1; d < degree; d++ {
