@@ -20,6 +20,8 @@ import (
 
 const Degree = math.Pi / 180
 
+var palette []image.Image
+
 type point struct {
 	x, y float64
 }
@@ -103,9 +105,8 @@ func worker(c chan image.Image, e chan int, r image.Rectangle) {
 
 		for y := 0; y < sz; y++ {
 			for x := 0; x < sz; x++ {
-				//img.Set(x, y, image.NewUniform(color.Gray{buf[y*sz+x]}))
 				nr := image.Rect(x*stridex, y*stridey, x*stridex+stridex, y*stridey+stridey)
-				draw.Draw(img, nr, image.NewUniform(color.Gray{buf[y*sz+x]}), image.ZP, draw.Src)
+				draw.Draw(img, nr, palette[buf[y*sz+x]], image.ZP, draw.Src)
 			}
 		}
 		c <- img
@@ -119,7 +120,8 @@ func painter(c chan image.Image, w gui.Window) {
 	img := w.Screen()
 	r := img.Bounds()
 
-	// workers may complete in any order
+	// workers may complete in any order but they sync on 'c' if
+	// they're faster than the drawing here
 	for {
 		draw.Draw(img, r, <-c, image.ZP, draw.Src)
 		w.FlushImage()
@@ -134,6 +136,13 @@ var size = flag.Int("size", 300, "crystal size")
 var scale = flag.Float64("scale", 30, "scale")
 var degree = flag.Int("degree", 5, "degree")
 var workers = flag.Int("w", 3, "workers")
+
+func init() {
+	palette = make([]image.Image, 256)
+	for i := 0; i < 256; i++ {
+		palette[i] = image.NewUniform(color.Gray{byte(i)})
+	}
+}
 
 func main() {
 	flag.Parse()
