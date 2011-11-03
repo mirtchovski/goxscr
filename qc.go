@@ -19,7 +19,7 @@ import (
 var offset = 50
 var ncolors = 256
 
-const Degree = math.Pi/180
+const Degree = math.Pi / 180
 
 type point struct {
 	x, y float64
@@ -57,6 +57,7 @@ func wave2(ϕ, θ float64, p point) float64 {
 }
 
 var buf []byte
+
 func quasicrystal(size, degree int, ϕ float64) {
 	buf = make([]byte, size*size)
 
@@ -75,7 +76,7 @@ func quasicrystal(size, degree int, ϕ float64) {
 					acc += wave(ϕ, θ, p)
 				}
 			}
-			buf[y*size + x] = byte(acc * 255.0)
+			buf[y*size+x] = byte(acc * 255.0)
 		}
 	}
 	return
@@ -85,8 +86,8 @@ func frame(sz, z, deg, time int, img draw.Image) {
 	ϕ := float64(time) * (*phi) * Degree
 	quasicrystal(sz, deg, ϕ)
 
-	stridex := img.Bounds().Dx()/sz // how big is each pixel from our crystal
-	stridey := img.Bounds().Dy()/sz
+	stridex := img.Bounds().Dx() / sz // how big is each pixel from our crystal
+	stridey := img.Bounds().Dy() / sz
 	for y := 0; y < sz; y++ {
 		for x := 0; x < sz; x++ {
 			//img.Set(x, y, image.NewUniform(color.Gray{buf[y*sz+x]}))
@@ -98,11 +99,11 @@ func frame(sz, z, deg, time int, img draw.Image) {
 }
 
 var t = 0
+
 func hack(img draw.Image) {
 	frame(*size, *zoom, *degree, t, img)
 	t++
 }
-
 
 var frate = flag.Int64("f", 60, "framerate")
 var phi = flag.Float64("s", 5, "step phase change")
@@ -116,15 +117,16 @@ func main() {
 
 	rand.Seed(int64(os.Getpid()))
 
-	*phi = 1+rand.Float64()*10
-	*size = 100+rand.Intn(300)
-	*zoom = 1+rand.Intn(3)
-	*scale= 10 + rand.Float64()*30
-	*degree = 1+rand.Intn(10)
+	*phi = 1 + rand.Float64()*10
+	*size = 100 + rand.Intn(300)
+	*zoom = 1 + rand.Intn(3)
+	*scale = 10 + rand.Float64()*30
+	*degree = 1 + rand.Intn(10)
 
 	buf = make([]byte, *size*(*size))
 
 	xscr.Init(hack, 1e9/(*frate))
 	xscr.Run()
 }
+
 var procs = flag.Int("p", 1, "workers")
