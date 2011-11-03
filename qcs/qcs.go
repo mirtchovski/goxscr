@@ -135,11 +135,10 @@ var scale = flag.Float64("scale", 30, "scale")
 var degree = flag.Int("degree", 5, "degree")
 var workers = flag.Int("w", 3, "workers")
 
-
 func main() {
 	flag.Parse()
 
-	runtime.GOMAXPROCS(*workers+1)
+	runtime.GOMAXPROCS(*workers + 1)
 
 	rand.Seed(int64(os.Getpid()))
 
@@ -167,7 +166,7 @@ loop:
 			case gui.MouseEvent:
 			case gui.KeyEvent:
 				if f.Key == 65307 { // ESC
-					fmt.Println("fps: ", doneframes / (time.Seconds() - begin))
+					fmt.Println("fps: ", doneframes/(time.Seconds()-begin))
 					break loop
 				}
 			case gui.ConfigEvent:
