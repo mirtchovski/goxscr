@@ -1,7 +1,7 @@
 include $(GOROOT)/src/Make.inc
 
 TARG=\
-	qc\
+	qcs\
 
 all: $(SHARED:%=%.$O) $(TARG)
 

@@ -14,11 +14,9 @@ import (
 	"math"
 	"os"
 	"rand"
+	"runtime"
 	"time"
 )
-
-var offset = 50
-var ncolors = 256
 
 const Degree = math.Pi / 180
 
@@ -114,6 +112,8 @@ func worker(c chan image.Image, e chan int, r image.Rectangle) {
 	}
 }
 
+var doneframes int64
+
 func painter(c chan image.Image, w gui.Window) {
 	t := time.NewTicker(1e9 / (*frames))
 	img := w.Screen()
@@ -123,19 +123,23 @@ func painter(c chan image.Image, w gui.Window) {
 	for {
 		draw.Draw(img, r, <-c, image.ZP, draw.Src)
 		w.FlushImage()
+		doneframes++
 		<-t.C
 	}
 }
 
-var frames = flag.Int64("f", 30, "framerate")
+var frames = flag.Int64("f", 30, "max framerate")
 var phi = flag.Float64("s", 5, "step phase change")
 var size = flag.Int("size", 300, "crystal size")
 var scale = flag.Float64("scale", 30, "scale")
 var degree = flag.Int("degree", 5, "degree")
-var workers = flag.Int("w", 1, "workers")
+var workers = flag.Int("w", 3, "workers")
+
 
 func main() {
 	flag.Parse()
+
+	runtime.GOMAXPROCS(*workers+1)
 
 	rand.Seed(int64(os.Getpid()))
 
@@ -153,6 +157,8 @@ func main() {
 		go worker(imgchan, emit, window.Screen().Bounds())
 	}
 	go painter(imgchan, window)
+
+	begin := time.Seconds()
 loop:
 	for {
 		select {
@@ -161,6 +167,7 @@ loop:
 			case gui.MouseEvent:
 			case gui.KeyEvent:
 				if f.Key == 65307 { // ESC
+					fmt.Println("fps: ", doneframes / (time.Seconds() - begin))
 					break loop
 				}
 			case gui.ConfigEvent:
