@@ -2,15 +2,15 @@
 package xscr
 
 import (
-	"exp/gui/x11"
 	"exp/gui"
+	"exp/gui/x11"
+	"fmt"
+	"image"
 	"image/color"
 	"image/draw"
-	"image"
-	"time"
-	"rand"
-	"fmt"
+	"math/rand"
 	"os"
+	"time"
 )
 
 func Border(dst draw.Image, r image.Rectangle, w int, src image.Image, sp image.Point) {

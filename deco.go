@@ -20,12 +20,12 @@
 package main
 
 import (
-	"image/draw"
-	"image/color"
-	"image"
-	"rand"
-
 	"./xscr"
+	"image"
+	"image/color"
+	"image/draw"
+
+	"math/rand"
 )
 
 var ncolors int = 256

@@ -4,15 +4,15 @@
 package main
 
 import (
-	"flag"
-	"image/draw"
-	"image/color"
-	"image"
-	"math"
-	"os"
-	"rand"
-
 	"./xscr"
+	"flag"
+	"image"
+	"image/color"
+	"image/draw"
+	"math"
+	"math/rand"
+
+	"os"
 )
 // todo(aam): double-buffer
 

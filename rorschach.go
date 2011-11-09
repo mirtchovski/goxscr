@@ -22,12 +22,12 @@
 package main
 
 import (
+	"./xscr"
 	"image"
 	"image/color"
 	"image/draw"
-	"rand"
+	"math/rand"
 	"time"
-	"./xscr"
 )
 
 var iterations = 40000

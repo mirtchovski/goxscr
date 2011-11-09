@@ -17,10 +17,10 @@
 package main
 
 import (
-	"image/draw"
-	"image/color"
-	"rand"
 	"image"
+	"image/color"
+	"image/draw"
+	"math/rand"
 	"sync"
 
 	"./xscr"

@@ -2,16 +2,16 @@
 package main
 
 import (
-	"exp/gui/x11"
 	"exp/gui"
+	"exp/gui/x11"
 	"flag"
 	"fmt"
-	"image/draw"
 	"image"
 	"image/color"
+	"image/draw"
 	"math"
+	"math/rand"
 	"os"
-	"rand"
 	"runtime"
 	"time"
 )
@@ -34,9 +34,9 @@ var scale = flag.Float64("scale", 30, "scale")
 var degree = flag.Int("degree", 5, "degree")
 
 type Work struct {
-	e int				// frame number to compute.
-	img draw.Image	// image to write to.
-	done chan bool	// send on this channel when work is done.
+	e    int        // frame number to compute.
+	img  draw.Image // image to write to.
+	done chan bool  // send on this channel when work is done.
 }
 
 func init() {
@@ -59,9 +59,8 @@ func transform(θ float64, p point) point {
 	return p
 }
 
-
 func worker(wc <-chan *Work) {
-	buf := make([]byte, *size * *size)
+	buf := make([]byte, *size**size)
 	sz := *size
 
 	for w := range wc {
@@ -69,8 +68,8 @@ func worker(wc <-chan *Work) {
 		dx := r.Dx()
 		dy := r.Dy()
 
-		stridex := 1 + dx / sz // how big is each pixel from our crystal
-		stridey := 1 + dy / sz
+		stridex := 1 + dx/sz // how big is each pixel from our crystal
+		stridey := 1 + dy/sz
 
 		ϕ := float64(w.e) * (*phi) * Degree
 		quasicrystal(sz, *degree, ϕ, buf)
@@ -94,12 +93,12 @@ func worker(wc <-chan *Work) {
 func main() {
 	flag.Parse()
 
-    runtime.GOMAXPROCS(*workers + 1)
+	runtime.GOMAXPROCS(*workers + 1)
 
 	rand.Seed(time.Nanoseconds())
 
 	if *randomize {
-		*phi = rand.Float64()*10
+		*phi = rand.Float64() * 10
 		*size = 100 + rand.Intn(200)
 		*scale = 25 + rand.Float64()*10
 		*degree = 3 + rand.Intn(5)
@@ -131,11 +130,11 @@ loop:
 	c := make(chan stats)
 	quit <- c
 	st := <-c
-	fmt.Printf("fps: %.1f, spf %.0fms, dev %.0fms\n", 1e9 / st.mean, st.mean / 1e6, st.stddev / 1e6)
+	fmt.Printf("fps: %.1f, spf %.0fms, dev %.0fms\n", 1e9/st.mean, st.mean/1e6, st.stddev/1e6)
 }
 
 type stats struct {
-	mean float64
+	mean   float64
 	stddev float64
 }
 
@@ -148,7 +147,7 @@ func painter(win gui.Window, quit <-chan chan<- stats) {
 	// can keep a worker busy even when the last frame
 	// that it has computed has not yet been retrieved by the
 	// painter loop.
-	work := make([]Work, *workers * 2)
+	work := make([]Work, *workers*2)
 	workChan := make(chan *Work)
 
 	for i := 0; i < *workers; i++ {
@@ -186,7 +185,7 @@ func painter(win gui.Window, quit <-chan chan<- stats) {
 				case c := <-quit:
 					mean := float64((now - start) / int64(frames))
 					c <- stats{
-						mean: mean,
+						mean:   mean,
 						stddev: math.Sqrt((sumdt2 / float64(frames)) - mean*mean),
 					}
 					return

@@ -20,10 +20,10 @@
 package main
 
 import (
-	"image/draw"
-	"rand"
-
 	"./xscr"
+	"image/draw"
+
+	"math/rand"
 )
 
 var offset = 50
