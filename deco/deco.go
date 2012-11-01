@@ -5,14 +5,14 @@
  * the above copyright notice appear in all copies and that both that
  * copyright notice and this permission notice appear in supporting
  * documentation.  No representations are made about the suitability of this
- * software for any purpose.  It is provided "as is" without express or 
+ * software for any purpose.  It is provided "as is" without express or
  * implied warranty.
  *
  * Concept snarfed from Michael D. Bayne in
  * http://www.go2net.com/internet/deep/1997/04/16/body.html
  */
 
-/* 
+/*
  * ported to Plan 9 by andrey@lanl.gov, 07/02
  */
 
