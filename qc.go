@@ -4,13 +4,14 @@
 package main
 
 import (
-	"./xscr"
+	"code.google.com/p/goxscr/xscr"
 	"flag"
 	"image"
 	"image/color"
 	"image/draw"
 	"math"
 	"math/rand"
+	"time"
 
 	"os"
 )
@@ -125,7 +126,7 @@ func main() {
 
 	buf = make([]byte, *size*(*size))
 
-	xscr.Init(hack, 1e9/(*frate))
+	xscr.Init(hack, time.Microsecond/time.Duration(*frate))
 	xscr.Run()
 }
 

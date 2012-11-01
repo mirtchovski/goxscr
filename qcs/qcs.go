@@ -2,8 +2,8 @@
 package main
 
 import (
-	"exp/gui"
-	"exp/gui/x11"
+	"code.google.com/p/x-go-binding/ui"
+	"code.google.com/p/x-go-binding/ui/x11"
 	"flag"
 	"fmt"
 	"image"
@@ -95,7 +95,7 @@ func main() {
 
 	runtime.GOMAXPROCS(*workers + 1)
 
-	rand.Seed(time.Nanoseconds())
+	rand.Seed(time.Now().UnixNano())
 
 	if *randomize {
 		*phi = rand.Float64() * 10
@@ -115,14 +115,14 @@ func main() {
 loop:
 	for e := range window.EventChan() {
 		switch f := e.(type) {
-		case gui.MouseEvent:
-		case gui.KeyEvent:
+		case ui.MouseEvent:
+		case ui.KeyEvent:
 			if f.Key == 65307 { // ESC
 				break loop
 			}
-		case gui.ConfigEvent:
+		case ui.ConfigEvent:
 			// nothing for now
-		case gui.ErrEvent:
+		case ui.ErrEvent:
 			break loop
 		}
 	}
@@ -138,8 +138,8 @@ type stats struct {
 	stddev float64
 }
 
-func painter(win gui.Window, quit <-chan chan<- stats) {
-	ticker := time.NewTicker(1e9 / *frames)
+func painter(win ui.Window, quit <-chan chan<- stats) {
+	ticker := time.NewTicker(1e9 / time.Duration(*frames))
 	screen := win.Screen()
 	r := screen.Bounds()
 
@@ -157,7 +157,7 @@ func painter(win gui.Window, quit <-chan chan<- stats) {
 	e := 0
 	frames := 0
 
-	now := time.Nanoseconds()
+	now := time.Now()
 	start := now
 	var sumdt2 float64
 
@@ -179,11 +179,11 @@ func painter(win gui.Window, quit <-chan chan<- stats) {
 				// wait for the next tick event or to be asked to quit.
 				select {
 				case t := <-ticker.C:
-					dt := t - now
+					dt := t.Sub(now)
 					sumdt2 += float64(dt * dt)
 					now = t
 				case c := <-quit:
-					mean := float64((now - start) / int64(frames))
+					mean := float64((now.Sub(start)) / time.Duration(frames))
 					c <- stats{
 						mean:   mean,
 						stddev: math.Sqrt((sumdt2 / float64(frames)) - mean*mean),
