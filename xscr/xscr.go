@@ -2,8 +2,8 @@
 package xscr
 
 import (
-	"exp/gui"
-	"exp/gui/x11"
+	"code.google.com/p/x-go-binding/ui"
+	"code.google.com/p/x-go-binding/ui/x11"
 	"fmt"
 	"image"
 	"image/color"
@@ -109,10 +109,10 @@ func SmoothRandomCmap(ncol int) []color.RGBA {
 	return Interpolate(c[0], c[1], ncol)
 }
 
-var window gui.Window
+var window ui.Window
 var hackchan chan bool
 var hackfun func(draw.Image)
-var hackdelay int64
+var hackdelay time.Duration
 
 func Flush() {
 	window.FlushImage()
@@ -122,31 +122,31 @@ func Flush() {
 // TODO(aam): resize
 func Run() {
 	hackfun(window.Screen())
+	c := time.Tick(hackdelay)
 loop:
 	for {
 		select {
 		case e := <-window.EventChan():
 			switch f := e.(type) {
-			case gui.MouseEvent:
-			case gui.KeyEvent:
+			case ui.MouseEvent:
+			case ui.KeyEvent:
 				if f.Key == 65307 { // ESC
 					break loop
 				}
-			case gui.ConfigEvent:
+			case ui.ConfigEvent:
 				hackchan <- true
 				hackfun(window.Screen())
-			case gui.ErrEvent:
+			case ui.ErrEvent:
 				break loop
 			}
-		case <-time.After(hackdelay):
+		case <-c:
 			hackfun(window.Screen())
 			window.FlushImage()
 		}
 	}
 }
 
-// Initialize all state
-func Init(hack func(draw.Image), delay int64) bool {
+func Init(hack func(draw.Image), delay time.Duration) bool {
 	var err error
 
 	window, err = x11.NewWindow()

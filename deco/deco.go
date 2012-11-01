@@ -20,12 +20,13 @@
 package main
 
 import (
-	"./xscr"
 	"image"
 	"image/color"
 	"image/draw"
 
 	"math/rand"
+
+	"code.google.com/p/goxscr/xscr"
 )
 
 var ncolors int = 256
