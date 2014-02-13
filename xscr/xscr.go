@@ -151,7 +151,7 @@ func Init(hack func(draw.Image), delay time.Duration) bool {
 
 	window, err = x11.NewWindow()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error:", err.Error())
+		fmt.Fprintf(os.Stderr, "error initializing x11: %v\n", err.Error())
 		return false
 	}
 

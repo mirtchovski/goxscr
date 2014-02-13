@@ -67,6 +67,8 @@ func deco(screen draw.Image) {
 }
 
 func main() {
-	xscr.Init(deco, 10e8)
+	if !xscr.Init(deco, 10e8) {
+		return
+	}
 	xscr.Run()
 }

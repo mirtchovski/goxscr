@@ -76,7 +76,8 @@ func popsquares(screen draw.Image) {
 }
 
 func main() {
-
-	xscr.Init(popsquares, 10e6)
+	if !xscr.Init(popsquares, 10e6) {
+		return
+	}
 	xscr.Run()
 }

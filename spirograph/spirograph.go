@@ -124,6 +124,8 @@ func main() {
 	black = image.NewUniform(color.RGBA{0, 0, 0, 0xff})
 	colors = xscr.RandomCmap(ncolors)
 
-	xscr.Init(spirograph, 1e9)
+	if !xscr.Init(spirograph, 1e9) {
+		return
+	}
 	xscr.Run()
 }

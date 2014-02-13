@@ -47,6 +47,8 @@ func main() {
 	cycle = *fcycle
 	ncolors = subdivision * subdivision
 	colors = xscr.SmoothRandomCmap(ncolors)
-	xscr.Init(palette, 10e6)
+	if !xscr.Init(palette, 10e6) {
+		return
+	}
 	xscr.Run()
 }

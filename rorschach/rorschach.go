@@ -86,7 +86,8 @@ func hurm(screen draw.Image) {
 }
 
 func main() {
-
-	xscr.Init(hurm, 1e9)
+	if !xscr.Init(hurm, 1e9) {
+		return
+	}
 	xscr.Run()
 }

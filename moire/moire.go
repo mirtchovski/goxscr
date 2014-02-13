@@ -49,6 +49,8 @@ func moire(screen draw.Image) {
 }
 
 func main() {
-	xscr.Init(moire, 1e9)
+	if !xscr.Init(moire, 1e9) {
+		return
+	}
 	xscr.Run()
 }
